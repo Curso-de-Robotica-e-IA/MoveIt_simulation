@@ -29,6 +29,11 @@ class JsonManager:
         with open(self.file or file, mode) as f:
             json.dump(data, f, indent=4)
 
+    def write_pose_obj_list_to_json(self, pose_obj: list):
+        #TODO - Pegar uma lista com uma pose e salvar no json nesse formato:
+        # {"list_name":[x, y, z, roll, pitch, yaw]}
+
+        ...
     def append_to_json(self, data: dict, file: str = '', mode: str = 'w'):
         file = self.assure_file_not_empty(file)
         file = Path(file)
