@@ -5,6 +5,7 @@ from geometry_msgs.msg import PoseStamped
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 from utils.json_manager import JsonManager
 
+
 class PoseJsonAdapter:
     """
     Adapts the json registry to be used in MoveIt.
@@ -44,18 +45,20 @@ class PoseJsonAdapter:
         return pose_msg
 
     @staticmethod
-    def adapt_robot_to_pose_stamped(pose: list, degrees=False, axes='rxyz', frame_id='world') -> PoseStamped:
+    def adapt_robot_to_pose_stamped(pose: list, degrees=True, axes='rxyz', frame_id='world') -> PoseStamped:
         """
-        Transforms a pose list to a PoseStamped object. The MoveGroup from MoveIt
-        uses this object as argument for some of its methods.
+        Use this method when dealing with robot's cartesian pose
+        [x, y, z, roll, pitch, yaw].
+        It will adapt this pose to a PoseStamped object.
+        The angles should be in degrees, NOT in radian.
         """
 
-        pose_msg = PoseJsonAdapter.adapt_to_pose_stamped(pose, degrees=True, axes='sxyz', frame_id='world')
+        pose_msg = PoseJsonAdapter.adapt_to_pose_stamped(pose, degrees=degrees, axes=axes, frame_id=frame_id)
 
         return pose_msg
 
     @staticmethod
-    def adapt_quaternion_to_radian(pose: PoseStamped) -> tuple:
+    def convert_quaternion_to_radian(pose: PoseStamped) -> tuple:
         quaternion = [0] * 4
 
         quaternion[0] = pose.pose.orientation.x
@@ -68,7 +71,7 @@ class PoseJsonAdapter:
         return radian_angles
 
     @staticmethod
-    def adapt_radian_angles_to_degrees(radian_angles: tuple) -> list:
+    def convert_radian_angles_to_degrees(radian_angles: tuple) -> list:
         angles = []
 
         for angle in radian_angles:
@@ -76,3 +79,35 @@ class PoseJsonAdapter:
             angles.append(degrees_angle)
 
         return angles
+
+    @staticmethod
+    def convert_degrees_angles_to_radian(degrees_angles: list) -> list:
+        radian_angles = []
+
+        for angle in degrees_angles:
+            radian_angle = round(math.radians(angle), 5)
+            radian_angles.append(radian_angle)
+
+        return radian_angles
+
+    @staticmethod
+    def treat_degrees_angle(angle: float) -> float:
+        if angle > 180:
+            angle = angle - 360
+
+        return angle
+
+    @staticmethod
+    def treat_all_degrees_angles(angles: list) -> list:
+        """
+        Solve the issue when an angle is sent with values above 180°.
+        MoveIt only accepts angles between [-180, 180]
+        """
+
+        treated_angles = []
+
+        for angle in angles:
+            angle = PoseJsonAdapter.treat_degrees_angle(angle)
+            treated_angles.append(angle)
+
+        return treated_angles

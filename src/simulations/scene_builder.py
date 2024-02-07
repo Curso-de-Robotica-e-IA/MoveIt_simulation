@@ -136,5 +136,6 @@ if __name__ == "__main__":
     scene = Scene(setup)
     print(scene.table_obj.name)
     scene.clean_scene()
+    jm = JsonManager()
     # scene.add_mesh()
     # scene.add_table()

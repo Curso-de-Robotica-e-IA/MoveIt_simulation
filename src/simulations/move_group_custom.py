@@ -13,6 +13,7 @@ class MoveGroup:
                  goal_tolerance: float = 0.025
                  ):
 
+        self.current_joints: list = []
         self.goal_tolerance = goal_tolerance
         self.planning_time = planning_time
         self.planning_attempts = planning_attempts
@@ -25,19 +26,27 @@ class MoveGroup:
     def get_current_pose(self) -> PoseStamped:
         return self.move_group.get_current_pose()
 
-    def plan_and_execute(self, pose: PoseStamped, planner: str = ''):
+    def get_current_joints(self) -> list:
         """
-        Plan the path from start state to goal state.
-        First checks if the robot is in start state,
-        in case not, move the robot to start state
-        and then plans the trajectory to goal.
+        Return:
+            A list with the values of the joints angles in radian
+        """
+        return self.move_group.get_current_joint_values()
+
+    def plan_and_execute_pose(self, pose: PoseStamped, planner: str = 'RRTConnect'):
+        """
+        Plan the path from start state to goal state. These states
+        are set as a pose represented by a PoseStamped object
+
 
         Args:
-            pose: List with pose to go. Ex: [x, y, z, roll, pitch, yaw]
+            pose: PoseStamped object with position(x, y, z)
+             and orientation(roll, pitch, yaw)
                 OBS: Supply angles in degrees
+
             planner: A string with the planner to use. The name needs
                      to be the same as in Rviz grapical interface.
-                     Ex: 'LazyPRMstar'
+                     Ex: 'RRTConnect'
 
         Return:
             ...
@@ -62,7 +71,42 @@ class MoveGroup:
         self.current_pose = self.move_group.get_current_pose()
         print("current pose\n", self.current_pose)
 
+    def plan_and_execute_joints(self, joints: list, planner: str = 'RRTConnect'):
+        """
+        Plan the path from start state to goal state. These states
+        are set as joints angles.
+
+
+        Args:
+            joints: A list of robot's joints angles with degrees values
+                OBS: Supply angles in degrees
+
+            planner: A string with the planner to use. The name needs
+                     to be the same as in Rviz grapical interface.
+                     Ex: 'LazyPRMstar'
+
+        Return:
+            ...
+        """
         self.move_group.set_start_state_to_current_state()
+
+        self.move_group.set_joint_value_target(joints)
+        # move_group.set_goal_tolerance(0.025)
+        self.set_planning_config(planner=planner)
+        print("planner query id -- ", self.move_group.get_planner_id())
+        plan = self.move_group.plan()
+
+        if not MoveGroup.plan_is_successful(plan):
+            return
+
+        print("going to position")
+        success = self.move_group.execute(plan[1], wait=True)
+
+        if not success:
+            return
+
+        self.current_joints = self.move_group.get_current_joint_values()
+        print("current joints values\n", self.current_joints)
 
     def is_same_pose(self, pose_start, pose_goal):
         ...
@@ -114,6 +158,8 @@ class MoveGroup:
         # Parâmetro para melhorar a taxa de sucesso,
         # porém, aumentando as chances de colisão.
         # self.move_group.set_goal_tolerance(0.025)
+
+
 
     @staticmethod
     def plan_is_successful(plan: tuple):
