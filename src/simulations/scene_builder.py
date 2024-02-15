@@ -85,7 +85,6 @@ class Scene:
         """
         Adds a file mesh to a MoveIt scene.
         """
-        print("mesh fullpath:", mesh_path)
         rospy.loginfo(f'Adding the structure: {self.shelf_4s.name}')
 
         self.scene.add_mesh(
@@ -134,11 +133,3 @@ class PathPlanner:
                                                 moveit_msgs.msg.DisplayTrajectory,
                                                 queue_size=20,
                                                 )
-
-
-if __name__ == "__main__":
-    setup = SetUp()
-    scene = Scene(setup)
-    jm = JsonManager()
-    # scene.add_mesh()
-    # scene.add_table()
