@@ -26,11 +26,15 @@
 
 
 ### TODO
+- Planner configurations on robot class
 - move_group interface
 
 
+
 ### Log
-- 05/02/2024 - Links to understand Rviz interactive marker topic for goal state position:
+
+- 05/02/2024 
+  * Links to understand Rviz interactive marker topic for goal state position:
 
 https://github.com/ros-planning/moveit/issues/730
 https://robotics.stackexchange.com/questions/79686/how-to-change-moveit-goal-state-through-code?rq=1

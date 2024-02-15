@@ -1,14 +1,15 @@
-
 class RobotPose:
-    
-    def __init__(self, pose_name: str, pose_list: list):
+    def __init__(self, pose_name: str = '', pose_list: list = []):
         self.pose_name = pose_name
         self.pose_list = pose_list
-    
+
     def __name__(self) -> str:
         return self.pose_name
 
     def __repr__(self) -> str:
+        return self.pose_name
+
+    def __str__(self):
         return self.pose_name
 
 

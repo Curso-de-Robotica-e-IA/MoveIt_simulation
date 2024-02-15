@@ -1,5 +1,6 @@
 from geometry_msgs.msg import PoseStamped
 import moveit_commander
+from utils.utilities import measure_duration
 
 
 class MoveGroup:
@@ -63,13 +64,14 @@ class MoveGroup:
             return
 
         print("going to position")
-        success = self.move_group.execute(plan[1], wait=True)
+        with measure_duration():
+            success = self.move_group.execute(plan[1], wait=True)
 
         if not success:
             return
 
         self.current_pose = self.move_group.get_current_pose()
-        print("current pose\n", self.current_pose)
+        # print("current pose\n", self.current_pose)
 
     def plan_and_execute_joints(self, joints: list, planner: str = 'RRTConnect'):
         """
@@ -100,7 +102,8 @@ class MoveGroup:
             return
 
         print("going to position")
-        success = self.move_group.execute(plan[1], wait=True)
+        with measure_duration():
+            success = self.move_group.execute(plan[1], wait=True)
 
         if not success:
             return
@@ -115,8 +118,8 @@ class MoveGroup:
                             planner: str = "RRTConnect",
                             pose_ref_frame: str = "base_link",
                             allow_replanning: bool = False,
-                            planning_attempts: int = 100,
-                            planning_time: float = 2.6,
+                            planning_attempts: int = 50,
+                            planning_time: float = 3.0,
                             goal_tolerance: float = 0.025,
                             ):
         """
