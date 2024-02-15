@@ -2,6 +2,8 @@ import json
 from json import JSONDecodeError
 from pathlib import Path
 
+from utils.robot_pose import RobotPose
+
 
 class JsonManager:
 
@@ -29,11 +31,13 @@ class JsonManager:
         with open(self.file or file, mode) as f:
             json.dump(data, f, indent=4)
 
-    def write_pose_obj_list_to_json(self, pose_obj: list):
+    def write_pose_obj_list_to_json(self, robot_pose: RobotPose, file: str = '', mode: str = 'w'):
         #TODO - Pegar uma lista com uma pose e salvar no json nesse formato:
         # {"list_name":[x, y, z, roll, pitch, yaw]}
 
-        ...
+        robot_pose = {robot_pose: robot_pose.pose_list}
+        self.write_json(robot_pose, file=file, mode=mode)
+
     def append_to_json(self, data: dict, file: str = '', mode: str = 'w'):
         file = self.assure_file_not_empty(file)
         file = Path(file)
