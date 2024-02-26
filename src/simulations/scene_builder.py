@@ -6,7 +6,7 @@ from set_up import SetUp
 from move_group_custom import MoveGroup
 from robot import Robot
 from scene_object import ShelfOnly3s, TableObject, Shelf4s, Support
-from utils.path_manager import PathManager
+from utils.path_registry import PathRegistry
 from utils.pose_json_adapter import PoseJsonAdapter
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 import moveit_commander
@@ -68,7 +68,7 @@ class Scene:
         self.scene._apply_planning_scene_diff(req)
 
     def add_shelf_only_3s(self,
-                          mesh_path: str = PathManager.shelf_only_3s):
+                          mesh_path: str = PathRegistry.shelf_only_3s):
         """
         Adds a file mesh to a MoveIt scene.
         """
@@ -81,7 +81,7 @@ class Scene:
         )
 
     def add_shelf_4s(self,
-                     mesh_path: str = PathManager.shelf_4s):
+                     mesh_path: str = PathRegistry.shelf_4s):
         """
         Adds a file mesh to a MoveIt scene.
         """
@@ -94,7 +94,7 @@ class Scene:
         )
 
     def add_support(self,
-                    mesh_path: str = PathManager.support):
+                    mesh_path: str = PathRegistry.support):
         """
         Adds the support with the camera and bomb cylinder.
         """

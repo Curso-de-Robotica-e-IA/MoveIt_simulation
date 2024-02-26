@@ -1,5 +1,6 @@
 from geometry_msgs.msg import PoseStamped
 import moveit_commander
+from utils.utilities import measure_duration
 
 
 class MoveGroup:
@@ -33,7 +34,7 @@ class MoveGroup:
         """
         return self.move_group.get_current_joint_values()
 
-    def plan_and_execute_pose(self, pose: PoseStamped, planner: str = 'RRTConnect'):
+    def plan_and_execute_pose(self, pose: PoseStamped, planner: str = 'RRTConnect') -> any:
         """
         Plan the path from start state to goal state. These states
         are set as a pose represented by a PoseStamped object
@@ -63,13 +64,18 @@ class MoveGroup:
             return
 
         print("going to position")
-        success = self.move_group.execute(plan[1], wait=True)
+        with measure_duration():
+            success = self.move_group.execute(plan[1], wait=True)
+            print("result of move_group execute:", success)
+            print("trajectory type:", type(plan[1]))
 
         if not success:
             return
 
         self.current_pose = self.move_group.get_current_pose()
-        print("current pose\n", self.current_pose)
+        # print("current pose\n", self.current_pose)
+
+        return plan[1]
 
     def plan_and_execute_joints(self, joints: list, planner: str = 'RRTConnect'):
         """
@@ -100,7 +106,8 @@ class MoveGroup:
             return
 
         print("going to position")
-        success = self.move_group.execute(plan[1], wait=True)
+        with measure_duration():
+            success = self.move_group.execute(plan[1], wait=True)
 
         if not success:
             return
@@ -115,8 +122,8 @@ class MoveGroup:
                             planner: str = "RRTConnect",
                             pose_ref_frame: str = "base_link",
                             allow_replanning: bool = False,
-                            planning_attempts: int = 100,
-                            planning_time: float = 2.6,
+                            planning_attempts: int = 50,
+                            planning_time: float = 3.0,
                             goal_tolerance: float = 0.025,
                             ):
         """
@@ -134,6 +141,8 @@ class MoveGroup:
         goal_tolerance: Helps when planning is consistently failing, but raises collision probability
 
         allow_replanning:
+
+        Default configuration:
 
         planner: str = "RRTConnect",
         pose_ref_frame: str = "base_link",
@@ -158,8 +167,6 @@ class MoveGroup:
         # Parâmetro para melhorar a taxa de sucesso,
         # porém, aumentando as chances de colisão.
         # self.move_group.set_goal_tolerance(0.025)
-
-
 
     @staticmethod
     def plan_is_successful(plan: tuple):

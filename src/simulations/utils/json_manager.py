@@ -4,6 +4,8 @@ from pathlib import Path
 
 from utils.robot_pose import RobotPose
 
+from src.simulations.utils.path_registry import PathRegistry
+
 
 class JsonManager:
 
@@ -14,29 +16,38 @@ class JsonManager:
         file = self.assure_file_not_empty(file)
         file = Path(file)
 
-        with open(self.file or file, 'r') as f:
+        f = open(self.file or file, 'r')
 
-            try:
-                json_file = json.load(f)
-            except (JSONDecodeError, ):
-                print("Json is empty. Returning an empty dict")
-                return {}
+        try:
+            json_file = json.load(f)
+            f.close()
+        except (JSONDecodeError,):
+            print("Json is empty. Returning an empty dict")
+            return {}
 
-            return json_file
+        return json_file
 
     def write_json(self, data: dict, file: str = '', mode: str = 'w'):
         file = self.assure_file_not_empty(file)
         file = Path(file)
 
-        with open(self.file or file, mode) as f:
-            json.dump(data, f, indent=4)
+        f = open(self.file or file, mode)
 
-    def write_pose_obj_list_to_json(self, robot_pose: RobotPose, file: str = '', mode: str = 'w'):
-        #TODO - Pegar uma lista com uma pose e salvar no json nesse formato:
-        # {"list_name":[x, y, z, roll, pitch, yaw]}
+        json.dump(data, f, indent=4)
 
-        robot_pose = {robot_pose: robot_pose.pose_list}
-        self.write_json(robot_pose, file=file, mode=mode)
+    def append_pose_obj_list_to_json(self, robot_pose: RobotPose, file: str = PathRegistry.poses_json_fullpath):
+        """
+        Saves a RobotPose object into a json registry.
+        """
+        robot_pose = {str(robot_pose): robot_pose.pose_list}
+        self.append_to_json(robot_pose, file=file)
+
+    def append_list_to_json(self, pose_list: list, name: str = '', file: str = PathRegistry.poses_json_fullpath):
+        """
+        Saves a list with a pose object into a json registry.
+        """
+        robot_pose = {name: pose_list}
+        self.append_to_json(robot_pose, file=file)
 
     def append_to_json(self, data: dict, file: str = '', mode: str = 'w'):
         file = self.assure_file_not_empty(file)

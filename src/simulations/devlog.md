@@ -19,18 +19,24 @@
 
 #### [ROS TUTORIAL](https://wiki.ros.org/ROS/Tutorials)
 
-- [Currently on]( https://wiki.ros.org/ROS/Tutorials/UnderstandingTopics)
 
+- [Currently on]( https://wiki.ros.org/ROS/Tutorials/UnderstandingTopics)
+- [Trajectory ros msg](https://wiki.ros.org/Robots/TIAGo/Tutorials/trajectory_controller)
 
 
 
 
 ### TODO
+- Planner configurations on robot class
 - move_group interface
 
 
+
 ### Log
-- 05/02/2024 - Links to understand Rviz interactive marker topic for goal state position:
+- 15/02/2024
+  * Added Trajectory [Trajectory ros msg](https://wiki.ros.org/Robots/TIAGo/Tutorials/trajectory_controller) to ros tutorials. It has some examples of publishing trajectories
+- 05/02/2024 
+  * Links to understand Rviz interactive marker topic for goal state position:
 
 https://github.com/ros-planning/moveit/issues/730
 https://robotics.stackexchange.com/questions/79686/how-to-change-moveit-goal-state-through-code?rq=1

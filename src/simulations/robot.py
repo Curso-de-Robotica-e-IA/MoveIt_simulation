@@ -1,5 +1,6 @@
 from geometry_msgs.msg import PoseStamped
 from move_group_custom import MoveGroup
+from utils.utilities import measure_duration
 from utils.pose_json_adapter import PoseJsonAdapter
 
 
@@ -9,6 +10,7 @@ class Robot:
         self.pose_stamped: PoseStamped = self.get_pose()
         self.joints: list = self.get_joints_radian()
         self.joints_degrees: list = self.get_joints()
+        self.last_trajectory = None
 
     def get_pose(self) -> PoseStamped:
         return self.move_group.move_group.get_current_pose()
@@ -46,7 +48,7 @@ class Robot:
 
         return self.joints_degrees
 
-    def move_cartesian(self, pose: list, planner: str = 'LazyPRMstar'):
+    def move_cartesian(self, pose: list, planner: str = 'RRTConnect'):
         """
         Move the robot in Rviz graphical interface using pose values
 
@@ -63,7 +65,7 @@ class Robot:
 
         self.move_group.plan_and_execute_pose(pose_stamped, planner=planner)
 
-    def move_joints(self, joints: list, planner: str = 'LazyPRMstar'):
+    def move_joints(self, joints: list, planner: str = 'RRTConnect'):
         """
         Move the robot in Rviz graphical interface using joints values
 
@@ -81,8 +83,13 @@ class Robot:
         joints_radian = PoseJsonAdapter.convert_degrees_angles_to_radian(joints)
         print("radian angles:", joints_radian)
 
-        self.move_group.plan_and_execute_joints(joints_radian, planner=planner)
+        with measure_duration():
+            self.move_group.plan_and_execute_joints(joints_radian, planner=planner)
 
     def attach_support(self):
         self.move_group.move_group.attach_object('support', 'gripper_base_link')
+
+    def set_planner_configuration(self):
+        # TODO
+        ...
 
