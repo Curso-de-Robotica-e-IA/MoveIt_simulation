@@ -1,9 +1,10 @@
-from scene_builder import Scene
-from set_up import SetUp
+from pathlib import Path
+path = Path.cwd()
+print(f"{path = }")
+from classes.scene_builder import Scene
+from classes.set_up import SetUp
 from utils.path_registry import PathRegistry
 from utils.robot_pose_registry import RobotPoseRegistry
-from utils.robot_pose import RobotPose
-from utils.utilities import measure_duration
 from utils.json_manager import JsonManager
 
 def run_simulation_w3_q5_t6_after_top_recoil_pose():

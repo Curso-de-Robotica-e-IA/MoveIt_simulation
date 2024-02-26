@@ -1,19 +1,11 @@
-from pathlib import Path
-
-from geometry_msgs.msg import PoseStamped
-from moveit_msgs.msg import CollisionObject, RobotState
-from set_up import SetUp
-from move_group_custom import MoveGroup
-from robot import Robot
-from scene_object import ShelfOnly3s, TableObject, Shelf4s, Support
+from moveit_msgs.msg import CollisionObject
+from classes.set_up import SetUp
+from classes.move_group_custom import MoveGroup
+from classes.robot import Robot
+from classes.scene_object import ShelfOnly3s, TableObject, Shelf4s, Support
 from utils.path_registry import PathRegistry
-from utils.pose_json_adapter import PoseJsonAdapter
-from tf.transformations import quaternion_from_euler, euler_from_quaternion
-import moveit_commander
-import geometry_msgs.msg
 import moveit_msgs.msg
 import rospy
-from utils.json_manager import JsonManager
 
 
 class Scene:

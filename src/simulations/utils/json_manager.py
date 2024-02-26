@@ -4,7 +4,7 @@ from pathlib import Path
 
 from utils.robot_pose import RobotPose
 
-from src.simulations.utils.path_registry import PathRegistry
+from utils.path_registry import PathRegistry
 
 
 class JsonManager:

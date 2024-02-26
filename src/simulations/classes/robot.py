@@ -1,5 +1,5 @@
 from geometry_msgs.msg import PoseStamped
-from move_group_custom import MoveGroup
+from classes.move_group_custom import MoveGroup
 from utils.utilities import measure_duration
 from utils.pose_json_adapter import PoseJsonAdapter
 
