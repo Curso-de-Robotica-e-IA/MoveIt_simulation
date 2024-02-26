@@ -34,7 +34,7 @@ class MoveGroup:
         """
         return self.move_group.get_current_joint_values()
 
-    def plan_and_execute_pose(self, pose: PoseStamped, planner: str = 'RRTConnect'):
+    def plan_and_execute_pose(self, pose: PoseStamped, planner: str = 'RRTConnect') -> any:
         """
         Plan the path from start state to goal state. These states
         are set as a pose represented by a PoseStamped object
@@ -66,12 +66,16 @@ class MoveGroup:
         print("going to position")
         with measure_duration():
             success = self.move_group.execute(plan[1], wait=True)
+            print("result of move_group execute:", success)
+            print("trajectory type:", type(plan[1]))
 
         if not success:
             return
 
         self.current_pose = self.move_group.get_current_pose()
         # print("current pose\n", self.current_pose)
+
+        return plan[1]
 
     def plan_and_execute_joints(self, joints: list, planner: str = 'RRTConnect'):
         """
@@ -138,6 +142,8 @@ class MoveGroup:
 
         allow_replanning:
 
+        Default configuration:
+
         planner: str = "RRTConnect",
         pose_ref_frame: str = "base_link",
         allow_replanning: bool = False,
@@ -161,8 +167,6 @@ class MoveGroup:
         # Parâmetro para melhorar a taxa de sucesso,
         # porém, aumentando as chances de colisão.
         # self.move_group.set_goal_tolerance(0.025)
-
-
 
     @staticmethod
     def plan_is_successful(plan: tuple):

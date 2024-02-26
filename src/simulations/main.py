@@ -6,6 +6,9 @@ from utils.robot_pose import RobotPose
 from utils.utilities import measure_duration
 from utils.json_manager import JsonManager
 
+def run_simulation_w3_q5_t6_after_top_recoil_pose():
+    ...
+
 if __name__ == "__main__":
     setup = SetUp()
     scene = Scene(setup)
@@ -20,8 +23,8 @@ if __name__ == "__main__":
     wall3_q5_t6_after_top_recoil_pose = RobotPoseRegistry.wall3_q5_t6_after_top_recoil_pose.pose_list
     robot.move_cartesian(wall3_q5_t6_after_top_recoil_pose, planner='LazyPRMstar')
 
-    drop_pose = RobotPoseRegistry.drop_pose.pose_list
-    robot.move_cartesian(drop_pose, planner='LazyPRMstar')
+    # drop_pose = RobotPoseRegistry.drop_pose.pose_list
+    # trajectory = robot.move_cartesian(drop_pose, planner='LazyPRMstar')
 
     # home_pose = RobotPoseRegistry.home_pose.pose_list
     # robot.move_cartesian(home_pose)

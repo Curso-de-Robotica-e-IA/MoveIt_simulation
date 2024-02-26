@@ -10,6 +10,7 @@ class Robot:
         self.pose_stamped: PoseStamped = self.get_pose()
         self.joints: list = self.get_joints_radian()
         self.joints_degrees: list = self.get_joints()
+        self.last_trajectory = None
 
     def get_pose(self) -> PoseStamped:
         return self.move_group.move_group.get_current_pose()
@@ -91,3 +92,4 @@ class Robot:
     def set_planner_configuration(self):
         # TODO
         ...
+
