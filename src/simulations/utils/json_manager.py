@@ -4,6 +4,8 @@ from pathlib import Path
 
 from utils.robot_pose import RobotPose
 
+from src.simulations.utils.path_registry import PathRegistry
+
 
 class JsonManager:
 
@@ -19,7 +21,7 @@ class JsonManager:
         try:
             json_file = json.load(f)
             f.close()
-        except (JSONDecodeError, ):
+        except (JSONDecodeError,):
             print("Json is empty. Returning an empty dict")
             return {}
 
@@ -33,11 +35,18 @@ class JsonManager:
 
         json.dump(data, f, indent=4)
 
-    def append_pose_obj_list_to_json(self, robot_pose: RobotPose, file: str = ''):
-        #TODO - Pegar uma lista com uma pose e salvar no json nesse formato:
-        # {"list_name":[x, y, z, roll, pitch, yaw]}
-
+    def append_pose_obj_list_to_json(self, robot_pose: RobotPose, file: str = PathRegistry.poses_json_fullpath):
+        """
+        Saves a RobotPose object into a json registry.
+        """
         robot_pose = {str(robot_pose): robot_pose.pose_list}
+        self.append_to_json(robot_pose, file=file)
+
+    def append_list_to_json(self, pose_list: list, name: str = '', file: str = PathRegistry.poses_json_fullpath):
+        """
+        Saves a list with a pose object into a json registry.
+        """
+        robot_pose = {name: pose_list}
         self.append_to_json(robot_pose, file=file)
 
     def append_to_json(self, data: dict, file: str = '', mode: str = 'w'):
